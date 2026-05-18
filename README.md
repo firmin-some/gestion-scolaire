@@ -20,7 +20,7 @@ rigoureux tant sur le plan **financier** que **pédagogique**.
 | Nom & Prénom | Rôle |
 |--------------|------|
 | SOME Firmin  | Membre développeur |
-| MOYENGA Asiz | Membre développeur |
+| MOYENGA Aziz | Membre développeur |
 
 
 ---
