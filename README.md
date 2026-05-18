@@ -15,9 +15,10 @@ rigoureux tant sur le plan **financier** que **pédagogique**.
 
 ## 👥 Membres du groupe
 
-| Nom & Prénom | Rôle |
+| Nom & Prénom 
 |---|---|
-| SOME Firmin | Développeur principal |
+| SOME Firmin | 
+| MOYENGA Asiz |
 
 ---
 
