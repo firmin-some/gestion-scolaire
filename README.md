@@ -1,59 +1,165 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🏫 EcolePrime — Système de Gestion Scolaire (Cycle Primaire)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> Projet réalisé dans le cadre du cours de **Programmation Web et Framework**  
+> Année académique 2025–2026
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📋 Sujet
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Conception d'une application web pour la gestion d'un établissement
+d'enseignement primaire (du CP1 au CM2). L'application permet un suivi
+rigoureux tant sur le plan **financier** que **pédagogique**.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 👥 Membres du groupe
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+| Nom & Prénom | Rôle |
+|---|---|
+| SOME Firmin | Développeur principal |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## ⚙️ Installation
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Prérequis
+- PHP >= 8.2
+- Composer
+- MySQL (XAMPP)
+- Node.js et npm
 
-### Premium Partners
+### Étapes
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+**1. Cloner le projet**
+```bash
+git clone https://github.com/firmin-some/gestion-scolaire.git
+cd gestion-scolaire
+```
 
-## Contributing
+**2. Installer les dépendances PHP**
+```bash
+composer install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**3. Installer les dépendances JavaScript**
+```bash
+npm install && npm run build
+```
 
-## Code of Conduct
+**4. Configurer l'environnement**
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+**5. Configurer la base de données dans `.env`**
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=gestion_scolaire
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-## Security Vulnerabilities
+**6. Créer les tables**
+```bash
+php artisan migrate
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+**7. Lien de stockage**
+```bash
+php artisan storage:link
+```
 
-## License
+**8. Lancer l'application**
+```bash
+php artisan serve
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Accéder à : **http://127.0.0.1:8000**
+
+---
+
+## ✨ Fonctionnalités
+
+### 🔐 Authentification
+- Connexion sécurisée Gestionnaire / Enseignant
+
+### 📊 Tableau de bord
+- Statistiques en temps réel
+- Frais collectés vs attendus par classe
+- Liste des élèves impayés
+
+### 👦 Gestion des Élèves
+- Inscription avec photo
+- Recherche et filtrage par classe
+- Fiche détaillée par élève
+
+### 🏛️ Gestion des Classes
+- Configuration CP1 → CM2
+- Frais de scolarité par classe
+- Enseignant titulaire
+
+### 💰 Gestion des Paiements
+- Enregistrement des versements
+- Calcul automatique du reste à payer
+- Génération de reçu PDF
+- Historique des paiements
+
+### 📝 Notes & Moyennes
+- Saisie par matière et trimestre (T1, T2, T3)
+- 6 matières : Français, Maths, Sciences, Histoire-Géo, Anglais, EPS
+- Calcul automatique des moyennes avec mentions
+
+### 🏆 Classement
+- Classement par classe et trimestre
+- Médailles 🥇🥈🥉
+- Export bulletin PDF
+
+---
+
+## 🛠️ Technologies
+
+| Technologie | Usage |
+|---|---|
+| Laravel 12 | Framework PHP |
+| PHP 8.2 | Langage serveur |
+| MySQL | Base de données |
+| Bootstrap 5.3 | Interface utilisateur |
+| DomPDF | Génération PDF |
+
+---
+
+## 📁 Structure
+
+```
+gestion-scolaire/
+├── app/Http/Controllers/
+│   ├── DashboardController.php
+│   ├── ClasseController.php
+│   ├── EleveController.php
+│   ├── PaiementController.php
+│   └── NoteController.php
+├── app/Models/
+│   ├── Classe.php
+│   ├── Eleve.php
+│   ├── Paiement.php
+│   └── Note.php
+├── database/migrations/
+├── resources/views/
+│   ├── layouts/
+│   ├── classes/
+│   ├── eleves/
+│   ├── paiements/
+│   ├── notes/
+│   └── pdf/
+└── routes/web.php
+```
+
+---
+
+## 📄 Licence
+
+Projet académique — 2025–2026
