@@ -122,6 +122,13 @@ Accéder à : **http://127.0.0.1:8000**
 - Médailles 🥇🥈🥉
 - Export bulletin PDF
 
+### 🧑‍🏫 Gestion des Enseignants
+- Ajout, modification et suppression d’enseignants
+- Informations enregistrées : nom, prénom, sexe, spécialité, email, téléphone, date de naissance
+- Interface intuitive avec tableau récapitulatif et actions rapides (éditer / supprimer)
+- Notification de succès après chaque opération
+- Intégration complète au tableau de bord administratif
+
 ---
 
 ## 🛠️ Technologies
