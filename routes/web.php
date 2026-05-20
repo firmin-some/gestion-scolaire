@@ -7,19 +7,17 @@ use App\Http\Controllers\EleveController;
 use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\EnseignantController;
+use App\Http\Controllers\ParentController;
 
 // Page d'accueil → redirige vers dashboard
 Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
-// Désactiver l'inscription publique
-Route::get('/register', function () {
-    abort(403, 'Inscription non autorisée. Contactez l\'administrateur.');
-})->name('register');
-Route::post('/register', function () {
-    abort(403, 'Inscription non autorisée.');
-});
+/// Inscription publique pour les parents uniquement
+Route::get('/register', [App\Http\Controllers\Auth\RegisteredUserController::class, 'create'])
+     ->name('register');
+Route::post('/register', [App\Http\Controllers\Auth\RegisteredUserController::class, 'store']);
 
 // Routes protégées
 Route::middleware(['auth'])->group(function () {
@@ -59,6 +57,14 @@ Route::middleware(['auth'])->group(function () {
         // Enseignants
         Route::resource('enseignants', EnseignantController::class);
     });
+    // Routes Parent
+Route::middleware(['role:parent'])->prefix('parent')->name('parent.')->group(function () {
+    Route::get('/dashboard', [ParentController::class, 'dashboard'])->name('dashboard');
+    Route::get('/inscrire', [ParentController::class, 'createEleve'])->name('inscrire');
+    Route::post('/inscrire', [ParentController::class, 'storeEleve'])->name('inscrire.store');
+    Route::get('/notes/{eleve}', [ParentController::class, 'notes'])->name('notes');
+    Route::get('/paiements/{eleve}', [ParentController::class, 'paiements'])->name('paiements');
+});
 });
 
 // Routes d'authentification (login, logout...)

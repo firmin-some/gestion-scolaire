@@ -47,4 +47,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    // Ajouter après les autres méthodes
+public function eleves()
+{
+    return $this->hasMany(Eleve::class, 'parent_id');
+}
 }
