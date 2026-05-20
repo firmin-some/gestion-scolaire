@@ -9,18 +9,24 @@
 
 Conception d'une application web pour la gestion d'un établissement
 d'enseignement primaire (du CP1 au CM2). L'application permet un suivi
-rigoureux tant sur le plan **financier** que **pédagogique**.
+rigoureux tant sur le plan **financier** que **pédagogique**, avec un
+espace dédié pour les parents d'élèves.
 
 ---
 
 ## 👥 Membres du groupe
 
+
+
 | Nom & Prénom | Rôle |
+
 |--------------|------|
+
 | SOME Firmin  | Membre développeur |
+
 | MOYENGA Aziz | Membre développeur |
 
-
+``
 ---
 
 ## ⚙️ Installation
@@ -75,7 +81,29 @@ php artisan migrate
 php artisan storage:link
 ```
 
-**8. Lancer l'application**
+**8. Créer les comptes par défaut**
+```bash
+php artisan tinker
+```
+```php
+// Compte Gestionnaire
+\App\Models\User::create([
+    'name' => 'Admin Gestionnaire',
+    'email' => 'admin@ecoleprime.bf',
+    'password' => bcrypt('Admin@2025'),
+    'role' => 'gestionnaire'
+]);
+
+// Compte Enseignant
+\App\Models\User::create([
+    'name' => 'M. Enseignant',
+    'email' => 'enseignant@ecoleprime.bf',
+    'password' => bcrypt('Enseignant@2025'),
+    'role' => 'enseignant'
+]);
+```
+
+**9. Lancer l'application**
 ```bash
 php artisan serve
 ```
@@ -84,111 +112,140 @@ Accéder à : **http://127.0.0.1:8000**
 
 ---
 
+## 🔐 Comptes de test
+
+| Rôle | Email | Mot de passe |
+|---|---|---|
+| Gestionnaire | admin@ecoleprime.bf | Admin@2025 |
+| Enseignant | enseignant@ecoleprime.bf | Enseignant@2025 |
+| Parent | S'inscrire via /register | — |
+
+---
+
 ## ✨ Fonctionnalités
 
 ### 🔐 Authentification & Sécurité
-Connexion sécurisée Gestionnaire / Enseignant / Parent
+- Connexion sécurisée avec 3 rôles : Gestionnaire, Enseignant, Parent
+- Middleware de protection par rôle
+- Protection CSRF sur tous les formulaires
+- Inscription publique réservée aux parents
+- Mots de passe hashés (Bcrypt)
 
-Attribution automatique du rôle Parent à l’inscription
+### 📊 Tableau de bord (Gestionnaire)
+- Statistiques en temps réel
+- Frais collectés vs attendus par classe
+- Taux de collecte avec barres de progression
+- Liste des élèves impayés
 
-Gestion des rôles et permissions avec Spatie Laravel-Permission
-
-Limitation des tentatives de connexion et d’inscription (throttle)
-
-### 📊 Tableau de bord
--Redirection automatique selon le rôle :
-
-👨‍👩‍👧 Parent → élèves inscrits, notes, paiements
-
-🧑‍🏫 Enseignant → classes et notes
-
-🏛️ Gestionnaire → statistiques globales (finances, enseignants, impayés)
--Statistiques en temps réel
--Frais collectés vs attendus par classe
--Liste des élèves impayés
--Visualisation avec Chart.js
-
-### 👦 Gestion des Élèves
+### 👦 Gestion des Élèves (Gestionnaire)
 - Inscription avec photo
 - Recherche et filtrage par classe
 - Fiche détaillée par élève
+- Statut de paiement visible
 
-### 🏛️ Gestion des Classes
+### 🏛️ Gestion des Classes (Gestionnaire)
 - Configuration CP1 → CM2
 - Frais de scolarité par classe
 - Enseignant titulaire
 
-### 💰 Gestion des Paiements
+### 💰 Gestion des Paiements (Gestionnaire)
 - Enregistrement des versements
 - Calcul automatique du reste à payer
-- Génération de reçu PDF
-- Historique des paiements
+- Génération de reçu PDF téléchargeable
+- Historique complet des paiements
 
-### 📝 Notes & Moyennes
+### 📝 Notes & Moyennes (Gestionnaire + Enseignant)
 - Saisie par matière et trimestre (T1, T2, T3)
 - 6 matières : Français, Maths, Sciences, Histoire-Géo, Anglais, EPS
 - Calcul automatique des moyennes avec mentions
-
-### 🏆 Classement
-- Classement par classe et trimestre
-- Médailles 🥇🥈🥉
 - Export bulletin PDF
 
-### 🧑‍🏫 Gestion des Enseignants
-- Ajout, modification et suppression d’enseignants
-- Informations enregistrées : nom, prénom, sexe, spécialité, email, téléphone, date de naissance
-- Interface intuitive avec tableau récapitulatif et actions rapides (éditer / supprimer)
-- Notification de succès après chaque opération
-- Intégration complète au tableau de bord administratif
+### 🏆 Classement (Gestionnaire + Enseignant)
+- Classement par classe et trimestre
+- Médailles 🥇🥈🥉
+- Barres de progression
+
+### 👨‍🏫 Gestion des Enseignants (Gestionnaire)
+- Inscription des enseignants
+- Spécialité / matière enseignée
+- CRUD complet
+
+### 👨‍👩‍👦 Espace Parent
+- Inscription libre via /register
+- Inscription de ses enfants directement
+- Consultation des notes par trimestre
+- Consultation des paiements et frais
+- Accès limité (pas aux données administratives)
 
 ---
 
 ## 🛠️ Technologies
 
-|| Technologie | Usage |
-| --- | --- |
-| Laravel 12 | Framework PHP |
-| PHP 8.2 | Langage serveur |
-| MySQL | Base de données |
-| Bootstrap 5.3 | Interface utilisateur |
-| DomPDF | Génération PDF |
-| Spatie Laravel-Permission | Gestion des rôles et permissions |
+| Technologie | Version | Usage |
+|---|---|---|
+| Laravel | 12.x | Framework PHP backend |
+| PHP | 8.2 | Langage serveur |
+| MySQL | 10.4 | Base de données |
+| Bootstrap | 5.3 | Interface utilisateur |
+| Bootstrap Icons | 1.11 | Icônes |
+| DomPDF | 3.x | Génération PDF |
+| Blade | — | Moteur de templates |
+
+---
+
+## 🔒 Sécurité
+
+| Mesure | Description |
+|---|---|
+| Authentification | Laravel Breeze |
+| Protection CSRF | Token sur tous les formulaires |
+| Middleware rôles | Accès restreint par rôle |
+| Validation | Toutes les entrées validées |
+| Protection XSS | Échappement automatique Blade |
+| Injection SQL | Eloquent ORM (requêtes préparées) |
+| Hash passwords | Bcrypt |
+
 ---
 
 ## 📁 Structure
 
 ```
 gestion-scolaire/
-├── app/Http/Controllers/
-│   ├── DashboardController.php
-│   ├── ClasseController.php
-│   ├── EleveController.php
-│   ├── PaiementController.php
-│   ├── NoteController.php
-│   └── Auth/RegisteredUserController.php
-├── app/Models/
-│   ├── Classe.php
-│   ├── Eleve.php
-│   ├── Paiement.php
-│   └── Note.php
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── DashboardController.php
+│   │   │   ├── ClasseController.php
+│   │   │   ├── EleveController.php
+│   │   │   ├── PaiementController.php
+│   │   │   ├── NoteController.php
+│   │   │   ├── EnseignantController.php
+│   │   │   └── ParentController.php
+│   │   └── Middleware/
+│   │       └── CheckRole.php
+│   └── Models/
+│       ├── User.php
+│       ├── Classe.php
+│       ├── Eleve.php
+│       ├── Paiement.php
+│       ├── Note.php
+│       └── Enseignant.php
 ├── database/migrations/
-├── database/seeders/
-│   └── RoleSeeder.php
 ├── resources/views/
 │   ├── layouts/
-│   ├── dashboard/
-│   │   ├── parent.blade.php
-│   │   ├── enseignant.blade.php
-│   │   └── gestionnaire.blade.php
+│   ├── dashboard.blade.php
 │   ├── classes/
 │   ├── eleves/
 │   ├── paiements/
 │   ├── notes/
+│   ├── enseignants/
+│   ├── parent/
 │   └── pdf/
 └── routes/web.php
+```
 
 ---
 
 ## 📄 Licence
 
-Projet académique — 2025–2026
+Projet académique — IUTS 2025–2026
