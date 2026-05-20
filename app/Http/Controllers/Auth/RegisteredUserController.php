@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -16,7 +15,7 @@ use Illuminate\View\View;
 class RegisteredUserController extends Controller
 {
     /**
-     * Display the registration view.
+     * Affiche la vue d'inscription.
      */
     public function create(): View
     {
@@ -24,7 +23,7 @@ class RegisteredUserController extends Controller
     }
 
     /**
-     * Handle an incoming registration request.
+     * Gère la requête d'inscription.
      *
      * @throws ValidationException
      */
@@ -32,7 +31,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -42,10 +41,22 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        event(new Registered($user));
+        // 🔐 Attribution automatique du rôle Parent
+        $user->assignRole('Parent');
 
+        event(new Registered($user));
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        // 🔀 Redirection selon le rôle
+        if ($user->hasRole('Parent')) {
+            return redirect()->route('dashboard.parent');
+        } elseif ($user->hasRole('Enseignant')) {
+            return redirect()->route('dashboard.enseignant');
+        } elseif ($user->hasRole('Gestionnaire')) {
+            return redirect()->route('dashboard.gestionnaire');
+        }
+
+        // Fallback si aucun rôle n'est trouvé
+        return redirect()->route('dashboard.index');
     }
 }

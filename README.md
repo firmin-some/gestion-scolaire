@@ -15,8 +15,6 @@ rigoureux tant sur le plan **financier** que **pédagogique**.
 
 ## 👥 Membres du groupe
 
-## 👥 Membres du groupe
-
 | Nom & Prénom | Rôle |
 |--------------|------|
 | SOME Firmin  | Membre développeur |
@@ -88,13 +86,27 @@ Accéder à : **http://127.0.0.1:8000**
 
 ## ✨ Fonctionnalités
 
-### 🔐 Authentification
-- Connexion sécurisée Gestionnaire / Enseignant
+### 🔐 Authentification & Sécurité
+Connexion sécurisée Gestionnaire / Enseignant / Parent
+
+Attribution automatique du rôle Parent à l’inscription
+
+Gestion des rôles et permissions avec Spatie Laravel-Permission
+
+Limitation des tentatives de connexion et d’inscription (throttle)
 
 ### 📊 Tableau de bord
-- Statistiques en temps réel
-- Frais collectés vs attendus par classe
-- Liste des élèves impayés
+-Redirection automatique selon le rôle :
+
+👨‍👩‍👧 Parent → élèves inscrits, notes, paiements
+
+🧑‍🏫 Enseignant → classes et notes
+
+🏛️ Gestionnaire → statistiques globales (finances, enseignants, impayés)
+-Statistiques en temps réel
+-Frais collectés vs attendus par classe
+-Liste des élèves impayés
+-Visualisation avec Chart.js
 
 ### 👦 Gestion des Élèves
 - Inscription avec photo
@@ -133,14 +145,14 @@ Accéder à : **http://127.0.0.1:8000**
 
 ## 🛠️ Technologies
 
-| Technologie | Usage |
-|---|---|
+|| Technologie | Usage |
+| --- | --- |
 | Laravel 12 | Framework PHP |
 | PHP 8.2 | Langage serveur |
 | MySQL | Base de données |
 | Bootstrap 5.3 | Interface utilisateur |
 | DomPDF | Génération PDF |
-
+| Spatie Laravel-Permission | Gestion des rôles et permissions |
 ---
 
 ## 📁 Structure
@@ -152,22 +164,28 @@ gestion-scolaire/
 │   ├── ClasseController.php
 │   ├── EleveController.php
 │   ├── PaiementController.php
-│   └── NoteController.php
+│   ├── NoteController.php
+│   └── Auth/RegisteredUserController.php
 ├── app/Models/
 │   ├── Classe.php
 │   ├── Eleve.php
 │   ├── Paiement.php
 │   └── Note.php
 ├── database/migrations/
+├── database/seeders/
+│   └── RoleSeeder.php
 ├── resources/views/
 │   ├── layouts/
+│   ├── dashboard/
+│   │   ├── parent.blade.php
+│   │   ├── enseignant.blade.php
+│   │   └── gestionnaire.blade.php
 │   ├── classes/
 │   ├── eleves/
 │   ├── paiements/
 │   ├── notes/
 │   └── pdf/
 └── routes/web.php
-```
 
 ---
 
