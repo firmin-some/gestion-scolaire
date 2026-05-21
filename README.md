@@ -248,4 +248,4 @@ gestion-scolaire/
 
 ## 📄 Licence
 
-Projet académique — IUTS 2025–2026
+Projet académique — Université Joseph KI-ZERBO licence3 2025–2026
