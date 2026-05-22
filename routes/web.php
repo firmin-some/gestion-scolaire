@@ -71,6 +71,9 @@ Route::middleware(['role:parent'])->prefix('parent')->name('parent.')->group(fun
     Route::post('/inscrire', [ParentController::class, 'storeEleve'])->name('inscrire.store');
     Route::get('/notes/{eleve}', [ParentController::class, 'notes'])->name('notes');
     Route::get('/paiements/{eleve}', [ParentController::class, 'paiements'])->name('paiements');
+     Route::get('/paiements/{eleve}/payer', [ParentController::class, 'formPaiement'])->name('paiements.form');
+    Route::post('/paiements/{eleve}/payer', [ParentController::class, 'storePaiement'])->name('paiements.store');
+    Route::get('/paiements/{paiement}/recu', [ParentController::class, 'recuPdf'])->name('paiements.recu');
 });
 });
 

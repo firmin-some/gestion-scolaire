@@ -6,6 +6,9 @@ use App\Models\Eleve;
 use App\Models\Classe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Paiement;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class ParentController extends Controller
 {
@@ -76,4 +79,56 @@ class ParentController extends Controller
         $eleve->load('paiements', 'classe');
         return view('parent.paiements', compact('eleve'));
     }
+    // Formulaire de paiement
+public function formPaiement(Eleve $eleve)
+{
+    if ($eleve->parent_id !== Auth::id()) {
+        abort(403, 'Accès non autorisé.');
+    }
+    $eleve->load('classe', 'paiements');
+    return view('parent.payer', compact('eleve'));
+}
+
+// Enregistrer le paiement
+public function storePaiement(Request $request, Eleve $eleve)
+{
+    if ($eleve->parent_id !== Auth::id()) {
+        abort(403, 'Accès non autorisé.');
+    }
+
+    $request->validate([
+        'montant'       => 'required|numeric|min:100',
+        'mode_paiement' => 'required|in:Espèces,Orange Money,Moov Money,Virement',
+    ]);
+
+    $reste = $eleve->resteAPayer();
+
+    if ($request->montant > $reste) {
+        return back()->withErrors(['montant' => 'Le montant dépasse le reste à payer ('.$reste.' F)']);
+    }
+
+    $paiement = Paiement::create([
+        'eleve_id'      => $eleve->id,
+        'montant'       => $request->montant,
+        'mode_paiement' => $request->mode_paiement,
+        'date_paiement' => Carbon::today(),
+    ]);
+
+    return redirect()->route('parent.paiements.recu', $paiement->id)
+                     ->with('success', 'Paiement enregistré !');
+}
+
+// Générer le reçu PDF
+public function recuPdf(Paiement $paiement)
+{
+    if ($paiement->eleve->parent_id !== Auth::id()) {
+        abort(403, 'Accès non autorisé.');
+    }
+
+    $paiement->load('eleve.classe');
+    $pdf = Pdf::loadView('parent.recu-pdf', compact('paiement'))
+              ->setPaper([0, 0, 226.77, 425.20]); // format ticket
+
+    return $pdf->download('recu_'.$paiement->id.'.pdf');
+}
 }

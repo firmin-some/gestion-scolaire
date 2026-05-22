@@ -10,6 +10,12 @@
         Paiements de {{ $eleve->prenom }} {{ $eleve->nom }}
         <span class="badge bg-primary ms-2">{{ $eleve->classe->nom ?? '—' }}</span>
     </h5>
+     {{-- ✅ Bouton Payer ajouté ici --}}
+    @if($eleve->resteAPayer() > 0)
+        <a href="{{ route('parent.paiements.form', $eleve) }}" class="btn btn-success ms-auto">
+            <i class="bi bi-cash-coin"></i> Payer maintenant
+        </a>
+    @endif
 </div>
 
 @php
