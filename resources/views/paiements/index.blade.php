@@ -149,6 +149,7 @@
                             <th>Montant</th>
                             <th>Mode</th>
                             <th>Reste</th>
+                            <th>Statut</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -171,22 +172,56 @@
                                 </span>
                             </td>
                             <td class="d-flex gap-1">
-                                {{-- Bouton PDF --}}
-                                <a href="{{ route('paiements.recu-pdf', $p) }}"
-                                   class="btn btn-sm btn-outline-success"
-                                   title="Télécharger reçu PDF">
-                                    <i class="bi bi-file-pdf"></i>
-                                </a>
-                                {{-- Bouton supprimer --}}
-                                <form action="{{ route('paiements.destroy', $p) }}"
-                                      method="POST"
-                                      onsubmit="return confirm('Supprimer ce paiement ?')">
-                                    @csrf @method('DELETE')
-                                    <button class="btn btn-sm btn-outline-danger">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
+<td>
+    @if($p->statut === 'validé')
+        <span class="badge bg-success">✅ Validé</span>
+    @elseif($p->statut === 'rejeté')
+        <span class="badge bg-danger">❌ Rejeté</span>
+    @else
+        <span class="badge bg-warning text-dark">⏳ En attente</span>
+    @endif
+</td>
+
+{{-- Actions --}}
+<td class="d-flex gap-1 flex-wrap">
+
+    {{-- Valider --}}
+    @if($p->statut === 'en_attente')
+    <form action="{{ route('paiements.valider', $p) }}" method="POST">
+        @csrf @method('PATCH')
+        <button class="btn btn-sm btn-success" title="Valider">
+            <i class="bi bi-check-lg"></i>
+        </button>
+    </form>
+
+    {{-- Rejeter --}}
+    <form action="{{ route('paiements.rejeter', $p) }}" method="POST">
+        @csrf @method('PATCH')
+        <button class="btn btn-sm btn-danger" title="Rejeter">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </form>
+    @endif
+
+    {{-- PDF uniquement si validé --}}
+    @if($p->statut === 'validé')
+    <a href="{{ route('paiements.recu-pdf', $p) }}"
+       class="btn btn-sm btn-outline-success"
+       title="Télécharger reçu PDF">
+        <i class="bi bi-file-pdf"></i>
+    </a>
+    @endif
+
+    {{-- Supprimer --}}
+    <form action="{{ route('paiements.destroy', $p) }}"
+          method="POST"
+          onsubmit="return confirm('Supprimer ce paiement ?')">
+        @csrf @method('DELETE')
+        <button class="btn btn-sm btn-outline-danger">
+            <i class="bi bi-trash"></i>
+        </button>
+    </form>
+</td>
                         </tr>
                         @empty
                         <tr>

@@ -8,20 +8,21 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('eleves', function (Blueprint $table) {
-            $table->foreignId('parent_id')
-                  ->nullable()
-                  ->constrained('users')
-                  ->onDelete('set null')
-                  ->after('classe_id');
-        });
+        if (!Schema::hasColumn('eleves', 'parent_id')) {
+            Schema::table('eleves', function (Blueprint $table) {
+                $table->unsignedBigInteger('parent_id')->nullable()->after('id');
+                $table->foreign('parent_id')->references('id')->on('users')->onDelete('set null');
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('eleves', function (Blueprint $table) {
-            $table->dropForeign(['parent_id']);
-            $table->dropColumn('parent_id');
-        });
+        if (Schema::hasColumn('eleves', 'parent_id')) {
+            Schema::table('eleves', function (Blueprint $table) {
+                $table->dropForeign(['parent_id']);
+                $table->dropColumn('parent_id');
+            });
+        }
     }
 };

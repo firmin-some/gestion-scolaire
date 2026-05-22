@@ -42,12 +42,14 @@ Route::middleware(['auth'])->group(function () {
 
     // ---- Accessible au GESTIONNAIRE uniquement ----
     Route::middleware(['role:gestionnaire'])->group(function () {
+          Route::patch('/paiements/{paiement}/valider', [PaiementController::class, 'valider'])->name('paiements.valider');
+    Route::patch('/paiements/{paiement}/rejeter', [PaiementController::class, 'rejeter'])->name('paiements.rejeter');
+});
 
         // Classes
         Route::resource('classes', ClasseController::class);
 
         // Élèves
-       // ✅ Par ceci — routes explicites avec le bon paramètre
 Route::get('/eleves', [EleveController::class, 'index'])->name('eleves.index');
 Route::get('/eleves/create', [EleveController::class, 'create'])->name('eleves.create');
 Route::post('/eleves', [EleveController::class, 'store'])->name('eleves.store');
@@ -74,7 +76,6 @@ Route::middleware(['role:parent'])->prefix('parent')->name('parent.')->group(fun
      Route::get('/paiements/{eleve}/payer', [ParentController::class, 'formPaiement'])->name('paiements.form');
     Route::post('/paiements/{eleve}/payer', [ParentController::class, 'storePaiement'])->name('paiements.store');
     Route::get('/paiements/{paiement}/recu', [ParentController::class, 'recuPdf'])->name('paiements.recu');
-});
 });
 
 // Routes d'authentification (login, logout...)

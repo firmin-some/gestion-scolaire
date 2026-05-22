@@ -61,13 +61,12 @@
                 </div>
                 <div class="mb-4">
                     <label class="form-label fw-semibold">Mode de paiement</label>
-                    <select name="mode_paiement" class="form-select" required>
-                        <option value="">-- Choisir --</option>
-                        <option value="Espèces">💵 Espèces</option>
-                        <option value="Orange Money">🟠 Orange Money</option>
-                        <option value="Moov Money">🔵 Moov Money</option>
-                        <option value="Virement">🏦 Virement bancaire</option>
-                    </select>
+                  <select name="mode_paiement" class="form-select" required>
+    <option value="">-- Choisir --</option>
+    <option value="Orange Money">🟠 Orange Money</option>
+    <option value="Moov Money">🔵 Moov Money</option>
+    <option value="Virement">🏦 Virement bancaire</option>
+</select>
                 </div>
                 <button type="submit" class="btn btn-success btn-lg w-100">
                     <i class="bi bi-check-lg"></i> Confirmer le paiement

@@ -42,23 +42,38 @@ class PaiementController extends Controller
         return redirect()->route('paiements.index')
                          ->with('success', 'Paiement supprimé.');
     }
+
     public function recuPdf(Paiement $paiement)
-{
-    $paiement->load('eleve.classe', 'eleve.paiements');
-    $eleve  = $paiement->eleve;
-    $classe = $eleve->classe;
+    {
+        $paiement->load('eleve.classe', 'eleve.paiements');
+        $eleve  = $paiement->eleve;
+        $classe = $eleve->classe;
 
-    $data = [
-        'paiement' => $paiement,
-        'eleve'    => $eleve,
-        'classe'   => $classe,
-        'totalPaye'=> $eleve->totalPaye(),
-        'reste'    => $eleve->resteAPayer(),
-    ];
+        $data = [
+            'paiement' => $paiement,
+            'eleve'    => $eleve,
+            'classe'   => $classe,
+            'totalPaye'=> $eleve->totalPaye(),
+            'reste'    => $eleve->resteAPayer(),
+        ];
 
-    $pdf = Pdf::loadView('pdf.recu', $data)
-              ->setPaper('a5', 'portrait');
+        $pdf = Pdf::loadView('pdf.recu', $data)
+                  ->setPaper('a5', 'portrait');
 
-    return $pdf->download('recu-'.$eleve->nom.'-'.$paiement->id.'.pdf');
-}
+        return $pdf->download('recu-'.$eleve->nom.'-'.$paiement->id.'.pdf');
+    }
+
+    // ✅ Valider un paiement
+    public function valider(Paiement $paiement)
+    {
+        $paiement->update(['statut' => 'validé']);
+        return back()->with('success', 'Paiement validé !');
+    }
+
+    // ✅ Rejeter un paiement
+    public function rejeter(Paiement $paiement)
+    {
+        $paiement->update(['statut' => 'rejeté']);
+        return back()->with('success', 'Paiement rejeté.');
+    }
 }

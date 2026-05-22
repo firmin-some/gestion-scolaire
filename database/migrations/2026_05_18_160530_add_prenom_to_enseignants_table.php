@@ -6,29 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Crée la table enseignants avec toutes les colonnes nécessaires.
-     */
     public function up(): void
     {
-        Schema::create('enseignants', function (Blueprint $table) {
-            $table->id();
-            $table->string('nom');
-            $table->string('prenom');
-            $table->string('email')->unique();
-            $table->string('telephone')->nullable();
-            $table->string('specialite')->nullable();
-            $table->string('sexe')->nullable();
-            $table->date('date_naissance')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasColumn('enseignants', 'prenom')) {
+            Schema::table('enseignants', function (Blueprint $table) {
+                $table->string('prenom')->after('nom')->nullable();
+            });
+        }
     }
 
-    /**
-     * Supprime la table enseignants.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('enseignants');
+        if (Schema::hasColumn('enseignants', 'prenom')) {
+            Schema::table('enseignants', function (Blueprint $table) {
+                $table->dropColumn('prenom');
+            });
+        }
     }
 };
