@@ -102,15 +102,16 @@
                         @endif
                     </td>
                     <td>
-                        <a href="{{ route('eleves.show', $eleve) }}"
+                        {{-- ✅ CORRIGÉ : $eleve->id au lieu de $eleve --}}
+                        <a href="{{ route('eleves.show', $eleve->id) }}"
                            class="btn btn-sm btn-outline-info" title="Voir">
                             <i class="bi bi-eye"></i>
                         </a>
-                        <a href="{{ route('eleves.edit', $eleve) }}"
+                        <a href="{{ route('eleves.edit', $eleve->id) }}"
                            class="btn btn-sm btn-outline-warning" title="Modifier">
                             <i class="bi bi-pencil"></i>
                         </a>
-                        <form action="{{ route('eleves.destroy', $eleve) }}"
+                        <form action="{{ route('eleves.destroy', $eleve->id) }}"
                               method="POST" class="d-inline"
                               onsubmit="return confirm('Supprimer cet élève ?')">
                             @csrf @method('DELETE')

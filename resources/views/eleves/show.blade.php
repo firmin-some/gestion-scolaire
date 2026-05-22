@@ -27,7 +27,7 @@
                 <p><strong>Parent :</strong> {{ $eleve->nom_parent }}</p>
                 <p><strong>Tél :</strong> {{ $eleve->telephone_parent ?? '—' }}</p>
             </div>
-            <a href="{{ route('eleves.edit', $eleve) }}" class="btn btn-outline-warning btn-sm mt-2">
+      <a href="{{ route('eleves.edit', $eleve->id) }}" class="btn btn-outline-warning btn-sm mt-2">
                 <i class="bi bi-pencil"></i> Modifier
             </a>
         </div>

@@ -46,11 +46,16 @@
 
         <div class="table-responsive">
             <table class="table table-bordered text-center align-middle">
-                <thead class="table-dark">
+                <thead>
                     <tr>
-                        <th class="text-start">Élève</th>
+                        <th class="text-start"
+                            style="background-color:#212529 !important; color:#ffffff !important;">
+                            Élève
+                        </th>
                         @foreach($matieres as $m)
-                            <th style="font-size:12px">{{ $m }}</th>
+                            <th style="background-color:#212529 !important; color:#ffffff !important; font-size:12px">
+                                {{ $m }}
+                            </th>
                         @endforeach
                     </tr>
                 </thead>
