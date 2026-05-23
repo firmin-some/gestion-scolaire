@@ -20,6 +20,7 @@
                     <th>Spécialité</th>
                     <th>Email</th>
                     <th>Téléphone</th>
+                    <th><i class="bi bi-key"></i> Code</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -51,6 +52,20 @@
                     </td>
                     <td>{{ $e->email ?? '—' }}</td>
                     <td>{{ $e->telephone ?? '—' }}</td>
+
+                    {{-- ✅ Colonne Code --}}
+                    <td>
+                        @if($e->code)
+                            <span class="badge"
+                                  style="background:rgba(240,192,64,0.15);color:#856404;
+                                         font-family:monospace;font-size:13px;letter-spacing:1px;">
+                                <i class="bi bi-key-fill"></i> {{ $e->code }}
+                            </span>
+                        @else
+                            <span class="text-muted fst-italic small">Non défini</span>
+                        @endif
+                    </td>
+
                     <td>
                         <a href="{{ route('enseignants.edit', $e) }}"
                            class="btn btn-sm btn-outline-warning">
@@ -68,7 +83,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="text-center text-muted py-4">
+                    <td colspan="8" class="text-center text-muted py-4">
                         Aucun enseignant enregistré.
                         <a href="{{ route('enseignants.create') }}">Ajouter un enseignant</a>
                     </td>

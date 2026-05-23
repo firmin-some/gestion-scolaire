@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('eleve_id')->constrained('eleves')->onDelete('cascade');
             $table->integer('montant');
             $table->date('date_paiement');
-            $table->enum('mode_paiement', ['Espèces', 'Mobile Money', 'Virement', 'Chèque']);
+            $table->enum('mode_paiement', ['Espèces', 'Mobile Money', 'Virement', 'Chèque','Orange Money']);
             $table->timestamps();
         });
     }

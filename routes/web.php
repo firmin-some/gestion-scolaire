@@ -8,6 +8,7 @@ use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\ParentController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 // Page d'accueil → redirige vers dashboard
 Route::get('/', function () {
@@ -45,7 +46,11 @@ Route::middleware(['auth'])->group(function () {
           Route::patch('/paiements/{paiement}/valider', [PaiementController::class, 'valider'])->name('paiements.valider');
     Route::patch('/paiements/{paiement}/rejeter', [PaiementController::class, 'rejeter'])->name('paiements.rejeter');
 });
+Route::get('/login',  [AuthenticatedSessionController::class, 'create'])->name('login');
+Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 
+// Déconnexion
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
         // Classes
         Route::resource('classes', ClasseController::class);
 

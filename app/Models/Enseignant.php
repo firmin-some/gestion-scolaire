@@ -7,8 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 class Enseignant extends Model
 {
     protected $fillable = [
-        'nom', 'prenom', 'email',
-        'telephone', 'specialite',
-        'sexe', 'date_naissance'
+        'user_id',
+        'nom',
+        'prenom',
+        'code',
+        'email',
+        'telephone',
+        'specialite',
+        'sexe',
+        'date_naissance',
     ];
+
+    /**
+     * Relation avec le User (pour la connexion)
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

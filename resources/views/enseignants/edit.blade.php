@@ -27,7 +27,7 @@
                     <div class="col-md-4">
                         <label class="form-label fw-semibold">Date de naissance</label>
                         <input type="date" name="date_naissance"
-                               value="{{ $enseignant->date_naissance?->format('Y-m-d') }}"
+                              value="{{ $enseignant->date_naissance ? \Carbon\Carbon::parse($enseignant->date_naissance)->format('Y-m-d') : '' }}"
                                class="form-control">
                     </div>
                     <div class="col-md-4">
