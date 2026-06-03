@@ -51,8 +51,8 @@ Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 
 // Déconnexion
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-        // Classes
-        Route::resource('classes', ClasseController::class);
+     // Classes
+     Route::resource('classes', ClasseController::class)->parameters(['classes' => 'classe']);
 
         // Élèves
 Route::get('/eleves', [EleveController::class, 'index'])->name('eleves.index');
@@ -81,6 +81,11 @@ Route::middleware(['role:parent'])->prefix('parent')->name('parent.')->group(fun
      Route::get('/paiements/{eleve}/payer', [ParentController::class, 'formPaiement'])->name('paiements.form');
     Route::post('/paiements/{eleve}/payer', [ParentController::class, 'storePaiement'])->name('paiements.store');
     Route::get('/paiements/{paiement}/recu', [ParentController::class, 'recuPdf'])->name('paiements.recu');
+});
+
+// Gestionnaire parents management
+Route::middleware(['role:gestionnaire'])->prefix('gestionnaire')->name('gestionnaire.')->group(function () {
+    Route::get('/parents', [App\Http\Controllers\ParentController::class, 'index'])->name('parents.index');
 });
 
 // Routes d'authentification (login, logout...)

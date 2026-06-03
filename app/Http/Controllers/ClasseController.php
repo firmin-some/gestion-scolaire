@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Classe;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ClasseController extends Controller
 {
@@ -53,7 +54,20 @@ class ClasseController extends Controller
 
     public function destroy(Classe $classe)
     {
-        $classe->delete();
+        try {
+            $id = $classe->id;
+            $deleted = $classe->delete();
+            Log::info('Classe delete result', ['id' => $id, 'deleted' => (bool) $deleted]);
+            if (! $deleted) {
+                return redirect()->route('classes.index')
+                                 ->with('error', 'Impossible de supprimer la classe.');
+            }
+        } catch (\Exception $e) {
+            Log::error('Classe delete failed', ['id' => $classe->id, 'error' => $e->getMessage()]);
+            return redirect()->route('classes.index')
+                             ->with('error', 'Erreur lors de la suppression de la classe.');
+        }
+
         return redirect()->route('classes.index')
                          ->with('success', 'Classe supprimée.');
     }
