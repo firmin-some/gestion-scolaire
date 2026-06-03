@@ -18,6 +18,8 @@
                     <th>Nom & Prénom</th>
                     <th>Sexe</th>
                     <th>Spécialité</th>
+                    <th>Classe</th>
+                    <th>Statut</th>
                     <th>Email</th>
                     <th>Téléphone</th>
                     <th><i class="bi bi-key"></i> Code</th>
@@ -45,9 +47,19 @@
                     <td>{{ $e->sexe == 'M' ? 'Masculin' : 'Féminin' }}</td>
                     <td>
                         @if($e->specialite)
-                            <span class="badge bg-primary">{{ $e->specialite }}</span>
+                            <span class="badge bg-primary">{{ $e->specialite_label }}</span>
                         @else
                             <span class="text-muted">—</span>
+                        @endif
+                    </td>
+                    <td>{{ $e->classe?->nom ?? '—' }}</td>
+                    <td>
+                        @if($e->statut === 'titulaire')
+                            <span class="badge bg-success">Titulaire</span>
+                        @elseif($e->statut === 'secondaire')
+                            <span class="badge bg-secondary">Secondaire</span>
+                        @else
+                            <span class="badge bg-light text-dark">{{ ucfirst($e->statut ?? '—') }}</span>
                         @endif
                     </td>
                     <td>{{ $e->email ?? '—' }}</td>

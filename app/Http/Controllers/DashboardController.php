@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Classe;
 use App\Models\Eleve;
 use App\Models\Paiement;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -20,6 +21,16 @@ class DashboardController extends Controller
 
         $totalEleves  = Eleve::count();
         $totalClasses = Classe::count();
+
+        $parents = collect();
+        $totalParents = 0;
+        if ($user->role === 'gestionnaire') {
+            $parents = User::withCount('eleves')
+                           ->where('role', 'parent')
+                           ->has('eleves')
+                           ->get();
+            $totalParents = $parents->count();
+        }
 
         $fraisAttendu = 0;
         Eleve::with('classe')->get()->each(function($e) use (&$fraisAttendu) {
@@ -39,7 +50,8 @@ class DashboardController extends Controller
 
         return view('dashboard', compact(
             'totalEleves', 'totalClasses', 'fraisAttendu',
-            'fraisCollecte', 'tauxCollecte', 'elevesImpayes', 'classes'
+            'fraisCollecte', 'tauxCollecte', 'elevesImpayes', 'classes',
+            'parents', 'totalParents'
         ));
     }
 }

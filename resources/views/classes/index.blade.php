@@ -33,11 +33,11 @@
                     <td>{{ number_format($classe->frais, 0, ',', ' ') }} FCFA</td>
                     <td>{{ $classe->eleves_count }} élève(s)</td>
                     <td>
-                        <a href="{{ route('classes.edit', $classe) }}"
+                        <a href="{{ route('classes.edit', $classe->id) }}"
                            class="btn btn-sm btn-outline-warning">
                             <i class="bi bi-pencil"></i>
                         </a>
-                        <form action="{{ route('classes.destroy', $classe) }}"
+                        <form action="{{ route('classes.destroy', $classe->id) }}"
                               method="POST" class="d-inline"
                               onsubmit="return confirm('Supprimer cette classe ?')">
                             @csrf @method('DELETE')

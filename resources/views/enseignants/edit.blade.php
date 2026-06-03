@@ -34,8 +34,8 @@
                         <label class="form-label fw-semibold">Spécialité</label>
                         <select name="specialite" class="form-select">
                             <option value="">— Choisir —</option>
-                            @foreach(['Français','Mathématiques','Sciences','Histoire-Géo','Anglais','EPS','Toutes matières'] as $s)
-                                <option value="{{ $s }}" {{ $enseignant->specialite==$s?'selected':'' }}>{{ $s }}</option>
+                            @foreach(\App\Models\Enseignant::specialiteLabels() as $value => $label)
+                                <option value="{{ $value }}" {{ $enseignant->specialite == $value ? 'selected' : '' }}>{{ $label }}</option>
                             @endforeach
                         </select>
                     </div>

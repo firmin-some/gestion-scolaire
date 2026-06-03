@@ -52,11 +52,27 @@
                         <label class="form-label fw-semibold">Spécialité / Matière</label>
                         <select name="specialite" class="form-select @error('specialite') is-invalid @enderror" required>
                             <option value="">— Choisir —</option>
-                            @foreach(['Français','Mathématiques','Sciences','Histoire-Géo','Anglais','EPS','Toutes matières'] as $s)
-                                <option value="{{ $s }}" {{ old('specialite')==$s ? 'selected' : '' }}>{{ $s }}</option>
+                            @foreach($subjects as $value => $label)
+                                <option value="{{ $value }}" {{ old('specialite') == $value ? 'selected' : '' }}>{{ $label }}</option>
                             @endforeach
                         </select>
                         @error('specialite')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Classe</label>
+                        <select name="classe_id" class="form-select @error('classe_id') is-invalid @enderror" required>
+                            <option value="">— Choisir —</option>
+                            @foreach($classes as $classe)
+                                <option value="{{ $classe->id }}" {{ old('classe_id') == $classe->id ? 'selected' : '' }}>
+                                    {{ $classe->niveau }} - {{ $classe->nom }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('classe_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        <div class="form-text text-muted">
+                            Si la classe n'a pas encore de titulaire, cet enseignant sera défini comme titulaire. Sinon il sera enregistré comme secondaire.
+                        </div>
                     </div>
 
                     <div class="col-md-6">

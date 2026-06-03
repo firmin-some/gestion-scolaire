@@ -33,7 +33,46 @@
             <div class="text-muted small">avec reste à payer</div>
         </div>
     </div>
+    @if(auth()->user()->role === 'gestionnaire')
+    <div class="col-md-3">
+        <div class="card stat-card p-3">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="text-muted small">Parents d'élèves</div>
+                    <div class="fs-2 fw-bold text-info">{{ $totalParents }}</div>
+                    <div class="text-muted small">parents avec enfants</div>
+                </div>
+                <div>
+                    <a href="{{ route('gestionnaire.parents.index') }}" class="btn btn-sm btn-outline-primary">Voir</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
 </div>
+
+@if(auth()->user()->role === 'gestionnaire')
+<div class="row g-3 mb-4">
+    <div class="col-12">
+        <div class="card p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h6 class="fw-bold mb-1"><i class="bi bi-link-45deg text-primary"></i> Lien d'inscription parent</h6>
+                    <p class="text-muted mb-0">Envoyez ce lien aux parents pour qu'ils puissent s'inscrire eux-mêmes.</p>
+                </div>
+            </div>
+            <div class="input-group mb-2">
+                <input type="text" class="form-control" readonly value="{{ url('/register') }}">
+                <button class="btn btn-outline-secondary" type="button" onclick="navigator.clipboard.writeText('{{ url('/register') }}')">Copier</button>
+            </div>
+            <div class="text-muted small">
+                Ce lien doit être envoyé aux parents. Si vous êtes déjà connecté en tant que gestionnaire, la page /register vous redirigera vers le tableau de bord.
+                Ouvrez-le depuis un autre navigateur, une fenêtre privée ou envoyez-le directement au parent.
+            </div>
+        </div>
+    </div>
+</div>
+@endif
 
 <div class="row g-3">
     {{-- Frais par classe --}}
@@ -106,5 +145,43 @@
         </div>
     </div>
 </div>
+
+@if(auth()->user()->role === 'gestionnaire')
+<div class="row g-3 mt-4">
+    <div class="col-12">
+        <div class="card p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="fw-bold mb-0"><i class="bi bi-people-fill text-info"></i> Parents d'élèves</h6>
+                <small class="text-muted">{{ $totalParents }} parents</small>
+            </div>
+
+            @if($parents->isEmpty())
+                <div class="text-center text-muted py-4">Aucun parent inscrit avec un enfant.</div>
+            @else
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Email</th>
+                                <th>Enfants</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($parents as $parent)
+                            <tr>
+                                <td>{{ $parent->name }}</td>
+                                <td>{{ $parent->email }}</td>
+                                <td>{{ $parent->eleves_count }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
+@endif
 
 @endsection

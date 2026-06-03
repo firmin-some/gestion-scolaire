@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Eleve;
 use App\Models\Classe;
+use App\Models\Paiement;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Paiement;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
@@ -19,6 +20,15 @@ class ParentController extends Controller
                        ->with('classe', 'paiements', 'notes')
                        ->get();
         return view('parent.dashboard', compact('eleves'));
+    }
+
+    // Liste des parents pour le gestionnaire
+    public function index()
+    {
+        $parents = User::where('role', 'parent')
+                       ->withCount('eleves')
+                       ->get();
+        return view('gestionnaire.parents.index', compact('parents'));
     }
 
     // Formulaire inscription enfant

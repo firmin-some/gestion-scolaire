@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -28,7 +27,8 @@ class DatabaseSeeder extends Seeder
         $parent = User::create([
             'name' => 'SOME Firmin',
             'email' => 'parent@example.com',
-            'password' => Hash::make('password123'),
+            'password' => 'password123', // Le casting 'hashed' va le hasher automatiquement
+            'role' => 'parent',
         ]);
         $parent->assignRole('Parent');
 
@@ -36,7 +36,8 @@ class DatabaseSeeder extends Seeder
         $enseignant = User::create([
             'name' => 'SOME Firmin',
             'email' => 'enseignant@example.com',
-            'password' => Hash::make('password123'),
+            'password' => 'password123', // Le casting 'hashed' va le hasher automatiquement
+            'role' => 'enseignant',
         ]);
         $enseignant->assignRole('Enseignant');
 
@@ -44,7 +45,8 @@ class DatabaseSeeder extends Seeder
         $gestionnaire = User::create([
             'name' => 'SOME Firmin',
             'email' => 'gestionnaire@example.com',
-            'password' => Hash::make('password123'),
+            'password' => 'password123', // Le casting 'hashed' va le hasher automatiquement
+            'role' => 'gestionnaire',
         ]);
         $gestionnaire->assignRole('Gestionnaire');
     }

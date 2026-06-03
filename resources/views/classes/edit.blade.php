@@ -7,7 +7,7 @@
         <div class="card p-4">
             <h5 class="fw-bold mb-4"><i class="bi bi-pencil"></i> Modifier la classe</h5>
 
-            <form action="{{ route('classes.update', $classe) }}" method="POST">
+            <form action="{{ url('classes/' . $classe->id) }}" method="POST">
                 @csrf @method('PUT')
 
                 <div class="mb-3">
