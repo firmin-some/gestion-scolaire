@@ -15,7 +15,7 @@ class DashboardController extends Controller
         $user = Auth::user();
 
         // Rediriger le parent vers son espace
-        if ($user->role === 'parent') {
+        if ($user->hasRole('parent')) {
             return redirect()->route('parent.dashboard');
         }
 
@@ -24,9 +24,9 @@ class DashboardController extends Controller
 
         $parents = collect();
         $totalParents = 0;
-        if ($user->role === 'gestionnaire') {
-            $parents = User::withCount('eleves')
-                           ->where('role', 'parent')
+        if ($user->hasRole('gestionnaire')) {
+            $parents = User::role('parent')
+                           ->withCount('eleves')
                            ->has('eleves')
                            ->get();
             $totalParents = $parents->count();

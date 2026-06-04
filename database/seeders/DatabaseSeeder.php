@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             'password' => 'password123', // Le casting 'hashed' va le hasher automatiquement
             'role' => 'parent',
         ]);
-        $parent->assignRole('Parent');
+        $parent->assignRole('parent');
 
         // Enseignant
         $enseignant = User::create([
@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
             'password' => 'password123', // Le casting 'hashed' va le hasher automatiquement
             'role' => 'enseignant',
         ]);
-        $enseignant->assignRole('Enseignant');
+        $enseignant->assignRole('enseignant');
 
         // Gestionnaire
         $gestionnaire = User::create([
@@ -48,6 +48,6 @@ class DatabaseSeeder extends Seeder
             'password' => 'password123', // Le casting 'hashed' va le hasher automatiquement
             'role' => 'gestionnaire',
         ]);
-        $gestionnaire->assignRole('Gestionnaire');
+        $gestionnaire->assignRole('gestionnaire');
     }
 }

@@ -11,9 +11,9 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         // Création des rôles
-        $parent = Role::create(['name' => 'Parent']);
-        $enseignant = Role::create(['name' => 'Enseignant']);
-        $gestionnaire = Role::create(['name' => 'Gestionnaire']);
+        $parent = Role::create(['name' => 'parent']);
+        $enseignant = Role::create(['name' => 'enseignant']);
+        $gestionnaire = Role::create(['name' => 'gestionnaire']);
 
         // Création des permissions
         Permission::create(['name' => 'inscrire eleve']);

@@ -40,6 +40,8 @@ class RegisteredUserController extends Controller
             'role'     => 'parent', // Rôle parent automatique
         ]);
 
+        $user->assignRole('parent');
+
         event(new Registered($user));
         Auth::login($user);
 

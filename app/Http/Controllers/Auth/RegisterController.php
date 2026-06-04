@@ -31,8 +31,8 @@ class RegisterController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        // Attribution automatique du rôle Parent
-        $user->assignRole('Parent');
+        // Attribution automatique du rôle parent
+        $user->assignRole('parent');
 
         // Connexion automatique après inscription
         auth()->login($user);

@@ -25,7 +25,7 @@ class ParentController extends Controller
     // Liste des parents pour le gestionnaire
     public function index()
     {
-        $parents = User::where('role', 'parent')
+        $parents = User::role('parent')
                        ->withCount('eleves')
                        ->get();
         return view('gestionnaire.parents.index', compact('parents'));
