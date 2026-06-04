@@ -34,14 +34,33 @@
     </form>
 
     @if($eleves->isNotEmpty())
-    <table class="table table-hover align-middle">
-        <thead style="background-color: #1e293b;">
+
+    {{-- Style forcé pour ce tableau uniquement --}}
+    <style>
+        #tableau-classement thead tr th {
+            background-color: #1e293b !important;
+            color: #f8fafc !important;
+            padding: 10px 12px !important;
+            font-size: 13px !important;
+            border: none !important;
+        }
+        #tableau-classement tbody tr.top3-row {
+            background-color: #fef9c3 !important;
+        }
+        #tableau-classement tbody tr.top3-row td {
+            background-color: #fef9c3 !important;
+            color: #1e293b !important;
+        }
+    </style>
+
+    <table class="table table-hover align-middle" id="tableau-classement">
+        <thead>
             <tr>
-                <th style="color: #f8fafc !important;">Rang</th>
-                <th style="color: #f8fafc !important;">Élève</th>
-                <th style="color: #f8fafc !important;">Moyenne générale</th>
-                <th style="color: #f8fafc !important;">Mention</th>
-                <th style="color: #f8fafc !important;">Progression</th>
+                <th>Rang</th>
+                <th>Élève</th>
+                <th>Moyenne générale</th>
+                <th>Mention</th>
+                <th>Progression</th>
             </tr>
         </thead>
         <tbody>
@@ -60,12 +79,12 @@
                     ($moy >= 14 ? 'success' :
                     ($moy >= 10 ? 'warning text-dark' : 'danger'));
             @endphp
-            <tr style="{{ $rang <= 3 ? 'background-color: #fef9c3;' : '' }}">
+            <tr class="{{ $rang <= 3 ? 'top3-row' : '' }}">
                 <td>
                     <span class="fs-5">{{ $medal }}</span>
                 </td>
                 <td>
-                    <strong style="color: #1e293b;">{{ $eleve->prenom }} {{ $eleve->nom }}</strong>
+                    <strong>{{ $eleve->prenom }} {{ $eleve->nom }}</strong>
                 </td>
                 <td>
                     <span class="fs-5 fw-bold {{ $moy ? ($moy >= 10 ? 'text-success' : 'text-danger') : '' }}">
@@ -86,6 +105,7 @@
             @endforeach
         </tbody>
     </table>
+
     @elseif(request('classe_id'))
         <div class="alert alert-warning">
             <i class="bi bi-exclamation-triangle"></i> Aucune note saisie pour cette sélection.

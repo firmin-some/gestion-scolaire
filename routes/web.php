@@ -24,7 +24,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
          ->name('dashboard');
 
-    // Notes : accès lecture enseignant + gestionnaire
+    // Notes : accès lecture Enseignant + Gestionnaire
     Route::middleware(['role:Enseignant|Gestionnaire'])->group(function () {
         Route::get('/notes', [NoteController::class, 'index'])->name('notes.index');
         Route::get('/notes/eleves', [NoteController::class, 'getEleves'])->name('notes.eleves');
@@ -33,7 +33,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/notes/bulletin-pdf', [NoteController::class, 'bulletinPdf'])->name('notes.bulletin-pdf');
     });
 
-    // Notes : écriture enseignant uniquement
+    // Notes : écriture Enseignant uniquement
     Route::middleware(['role:Enseignant'])->group(function () {
         Route::post('/notes', [NoteController::class, 'store'])->name('notes.store');
     });
@@ -51,13 +51,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/paiements/{paiement}/recu', [ParentController::class, 'recuPdf'])->name('paiements.recu');
     });
 
-    // Élèves : accès lecture gestionnaire + enseignant
+    // Élèves : accès lecture Gestionnaire + Enseignant
     Route::middleware(['role:Enseignant|Gestionnaire'])->group(function () {
         Route::get('/eleves', [EleveController::class, 'index'])->name('eleves.index');
         Route::get('/eleves/{eleve}', [EleveController::class, 'show'])->name('eleves.show');
     });
 
-    // Gestionnaire : administration globale (sauf modification notes)
+    // Gestionnaire : administration globale
     Route::middleware(['role:Gestionnaire'])->group(function () {
         Route::resource('classes', ClasseController::class)->parameters(['classes' => 'classe']);
 
@@ -68,8 +68,10 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('paiements', PaiementController::class);
         Route::get('/paiements/{paiement}/recu-pdf', [PaiementController::class, 'recuPdf'])
              ->name('paiements.recu-pdf');
-        Route::patch('/paiements/{paiement}/valider', [PaiementController::class, 'valider'])->name('paiements.valider');
-        Route::patch('/paiements/{paiement}/rejeter', [PaiementController::class, 'rejeter'])->name('paiements.rejeter');
+        Route::patch('/paiements/{paiement}/valider', [PaiementController::class, 'valider'])
+             ->name('paiements.valider');
+        Route::patch('/paiements/{paiement}/rejeter', [PaiementController::class, 'rejeter'])
+             ->name('paiements.rejeter');
 
         Route::resource('enseignants', EnseignantController::class);
 

@@ -101,10 +101,18 @@
 .stat-card.blue  { border-color: #007bff; }
 .btn-primary { background: #1a1a2e; border-color: #1a1a2e; }
 .btn-primary:hover { background: #f0c040; border-color: #f0c040; color: #000; }
-.table th { background: #f8f9fa; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* ✅ CORRECTION : on ne touche plus au background des th globalement */
+/* Chaque vue gère son propre thead avec ses couleurs */
+.table th {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
 .badge-solde   { background: rgba(40,167,69,0.15);  color: #28a745; }
 .badge-partiel { background: rgba(255,193,7,0.15);  color: #856404; }
-.badge-nonpaye { background: rgba(220,53,69,0.15);  color: #dc3545; }.badge-nonpaye { background: rgba(220,53,69,0.15); color: #dc3545; }
+.badge-nonpaye { background: rgba(220,53,69,0.15);  color: #dc3545; }
     </style>
 </head>
 <body>

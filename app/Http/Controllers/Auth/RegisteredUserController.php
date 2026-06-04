@@ -37,15 +37,15 @@ class RegisteredUserController extends Controller
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
-            'role'     => 'parent', // Rôle parent automatique
+            'role'     => 'Parent', // ✅ Majuscule cohérent avec Spatie
         ]);
 
-        $user->assignRole('parent');
+        // ✅ Majuscule pour correspondre au rôle Spatie en base
+        $user->assignRole('Parent');
 
         event(new Registered($user));
         Auth::login($user);
 
-        // Redirection vers l'espace parent
         return redirect()->route('parent.dashboard');
     }
 }
