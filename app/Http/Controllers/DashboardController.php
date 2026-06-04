@@ -24,29 +24,33 @@ class DashboardController extends Controller
 
         $parents = collect();
         $totalParents = 0;
+        $fraisAttendu = 0;
+        $fraisCollecte = 0;
+        $tauxCollecte = 0;
+        $elevesImpayes = collect();
+        $classes = Classe::with('eleves.paiements')->get();
+
+        // Infos financières : gestionnaire uniquement
         if ($user->hasRole('gestionnaire')) {
             $parents = User::role('parent')
                            ->withCount('eleves')
                            ->has('eleves')
                            ->get();
             $totalParents = $parents->count();
+
+            Eleve::with('classe')->get()->each(function($e) use (&$fraisAttendu) {
+                $fraisAttendu += (int)($e->classe->frais ?? 0);
+            });
+
+            $fraisCollecte = (int) Paiement::sum('montant');
+            $tauxCollecte  = $fraisAttendu > 0
+                                ? round($fraisCollecte / $fraisAttendu * 100)
+                                : 0;
+
+            $elevesImpayes = Eleve::with('classe', 'paiements')
+                                ->get()
+                                ->filter(fn($e) => $e->resteAPayer() > 0);
         }
-
-        $fraisAttendu = 0;
-        Eleve::with('classe')->get()->each(function($e) use (&$fraisAttendu) {
-            $fraisAttendu += (int)($e->classe->frais ?? 0);
-        });
-
-        $fraisCollecte = (int) Paiement::sum('montant');
-        $tauxCollecte  = $fraisAttendu > 0
-                            ? round($fraisCollecte / $fraisAttendu * 100)
-                            : 0;
-
-        $elevesImpayes = Eleve::with('classe', 'paiements')
-                            ->get()
-                            ->filter(fn($e) => $e->resteAPayer() > 0);
-
-        $classes = Classe::with('eleves.paiements')->get();
 
         return view('dashboard', compact(
             'totalEleves', 'totalClasses', 'fraisAttendu',

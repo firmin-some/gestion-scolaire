@@ -12,6 +12,7 @@
             <div class="text-muted small">{{ $totalClasses }} classes</div>
         </div>
     </div>
+    @if(auth()->user()->hasRole('gestionnaire'))
     <div class="col-md-3">
         <div class="card stat-card green p-3">
             <div class="text-muted small">Frais collectés</div>
@@ -33,7 +34,6 @@
             <div class="text-muted small">avec reste à payer</div>
         </div>
     </div>
-    @if(auth()->user()->role === 'gestionnaire')
     <div class="col-md-3">
         <div class="card stat-card p-3">
             <div class="d-flex justify-content-between align-items-start">
@@ -74,6 +74,7 @@
 </div>
 @endif
 
+@if(auth()->user()->hasRole('gestionnaire'))
 <div class="row g-3">
     {{-- Frais par classe --}}
     <div class="col-md-7">
@@ -145,6 +146,7 @@
         </div>
     </div>
 </div>
+@endif
 
 @if(auth()->user()->role === 'gestionnaire')
 <div class="row g-3 mt-4">
