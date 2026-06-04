@@ -18,12 +18,6 @@
 @else
     <div class="row g-3">
         @foreach($eleves as $eleve)
-        @php
-            $frais = $eleve->classe->frais ?? 0;
-            $paye  = $eleve->totalPaye();
-            $reste = $eleve->resteAPayer();
-            $taux  = $frais > 0 ? round($paye / $frais * 100) : 0;
-        @endphp
         <div class="col-md-6">
             <div class="card p-4">
                 <div class="d-flex align-items-center gap-3 mb-3">
@@ -38,32 +32,10 @@
                     </div>
                 </div>
 
-                {{-- Situation financière --}}
-                <div class="mb-3">
-                    <div class="d-flex justify-content-between small mb-1">
-                        <span class="text-muted">Frais annuels</span>
-                        <strong>{{ number_format($frais,0,',',' ') }} F</strong>
-                    </div>
-                    <div class="d-flex justify-content-between small mb-1">
-                        <span class="text-muted">Payé</span>
-                        <strong class="text-success">{{ number_format($paye,0,',',' ') }} F</strong>
-                    </div>
-                    <div class="d-flex justify-content-between small mb-2">
-                        <span class="text-muted">Reste</span>
-                        <strong class="{{ $reste > 0 ? 'text-danger' : 'text-success' }}">
-                            {{ number_format($reste,0,',',' ') }} F
-                        </strong>
-                    </div>
-                    <div class="progress" style="height:8px">
-                        <div class="progress-bar bg-success" style="width:{{ $taux }}%"></div>
-                    </div>
-                    <small class="text-muted">{{ $taux }}% payé</small>
-                </div>
-
                 <div class="d-flex gap-2">
                     <a href="{{ route('parent.notes', $eleve) }}"
                        class="btn btn-outline-primary btn-sm flex-fill">
-                        <i class="bi bi-pencil-fill"></i> Notes
+                        <i class="bi bi-book-fill"></i> Notes
                     </a>
                     <a href="{{ route('parent.paiements', $eleve) }}"
                        class="btn btn-outline-success btn-sm flex-fill">
