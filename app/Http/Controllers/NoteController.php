@@ -54,20 +54,20 @@ class NoteController extends Controller
     }
 
     public function moyennes(Request $request)
-{
-    $classes  = Classe::all();
-    $matieres = ['Français','Mathématiques','Sciences','Histoire-Géo','Anglais','EPS'];
-    $eleves   = collect();
+    {
+        $classes  = Classe::all();
+        $matieres = ['Français','Mathématiques','Sciences','Histoire-Géo','Anglais','EPS'];
+        $eleves   = collect();
 
-    if ($request->filled('classe_id') && $request->filled('trimestre')) {
-        $eleves = Eleve::where('classe_id', $request->classe_id)
-                       ->with(['notes' => fn($q) =>
-                           $q->where('trimestre', $request->trimestre)])
-                       ->get();
+        if ($request->filled('classe_id') && $request->filled('trimestre')) {
+            $eleves = Eleve::where('classe_id', $request->classe_id)
+                           ->with(['notes' => fn($q) =>
+                               $q->where('trimestre', $request->trimestre)])
+                           ->get();
+        }
+
+        return view('notes.moyennes', compact('classes','matieres','eleves'));
     }
-
-    return view('notes.moyennes', compact('classes','matieres','eleves'));
-}
 
     public function classement(Request $request)
     {
@@ -86,26 +86,34 @@ class NoteController extends Controller
 
         return view('notes.classement', compact('classes','eleves'));
     }
+
     public function bulletinPdf(Request $request)
-{
-    $request->validate([
-        'classe_id' => 'required|exists:classes,id',
-        'trimestre' => 'required|in:T1,T2,T3',
-    ]);
+    {
+        $request->validate([
+            'classe_id' => 'required|exists:classes,id',
+            'trimestre' => 'required|in:T1,T2,T3',
+        ]);
 
-    $classe   = Classe::with('eleves.notes')->find($request->classe_id);
-    $matieres = ['Français','Mathématiques','Sciences','Histoire-Géo','Anglais','EPS'];
-    $trimestre= $request->trimestre;
+        $trimestre = $request->trimestre;
 
-    $eleves = Eleve::where('classe_id', $request->classe_id)
-                   ->with(['notes' => fn($q) => $q->where('trimestre', $trimestre)])
-                   ->get()
-                   ->sortByDesc(fn($e) => $e->notes->avg('note') ?? 0)
-                   ->values();
+        // ✅ Classe simple sans eager loading des notes
+        $classe = Classe::find($request->classe_id);
 
-    $pdf = Pdf::loadView('pdf.bulletin', compact('classe','eleves','matieres','trimestre'))
-              ->setPaper('a4', 'portrait');
+        $matieres = ['Français','Mathématiques','Sciences','Histoire-Géo','Anglais','EPS'];
 
-    return $pdf->download('bulletin-'.$classe->nom.'-'.$trimestre.'.pdf');
-}
+        // ✅ Élèves avec notes filtrées par trimestre ET classe_id
+        $eleves = Eleve::where('classe_id', $request->classe_id)
+                       ->with(['notes' => function($q) use ($trimestre, $request) {
+                           $q->where('trimestre', $trimestre)
+                             ->where('classe_id', $request->classe_id);
+                       }])
+                       ->get()
+                       ->sortByDesc(fn($e) => $e->notes->avg('note') ?? 0)
+                       ->values();
+
+        $pdf = Pdf::loadView('pdf.bulletin', compact('classe','eleves','matieres','trimestre'))
+                  ->setPaper('a4', 'portrait');
+
+        return $pdf->download('bulletin-'.$classe->nom.'-'.$trimestre.'.pdf');
+    }
 }

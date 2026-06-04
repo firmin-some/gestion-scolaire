@@ -120,7 +120,7 @@
     </a>
 
     {{-- Menu Administratif (Gestionnaire uniquement) --}}
-    @if(auth()->user()->role === 'gestionnaire')
+    @if(auth()->user()->hasRole('Gestionnaire'))
     <div class="nav-label">Administratif</div>
     <a href="{{ route('eleves.index') }}"
        class="nav-link {{ request()->routeIs('eleves.*') ? 'active' : '' }}">
@@ -141,7 +141,7 @@
     @endif
 
     {{-- Menu Enseignant --}}
-    @if(auth()->user()->role === 'enseignant')
+    @if(auth()->user()->hasRole('Enseignant'))
     <div class="nav-label">Enseignant</div>
     <a href="{{ route('eleves.index') }}"
        class="nav-link {{ request()->routeIs('eleves.index') ? 'active' : '' }}">
@@ -150,7 +150,7 @@
     @endif
 
     {{-- Menu Parent / Enseignant parent --}}
-    @if(auth()->user()->hasRole('parent') || auth()->user()->hasRole('enseignant'))
+    @if(auth()->user()->hasRole('Parent') || auth()->user()->hasRole('Enseignant'))
     <div class="nav-label">Espace Parent</div>
     <a href="{{ route('parent.dashboard') }}"
        class="nav-link {{ request()->routeIs('parent.*') ? 'active' : '' }}">
@@ -158,7 +158,7 @@
     </a>
     @endif
 
-    @if(auth()->user()->hasRole('enseignant') || auth()->user()->role === 'gestionnaire')
+    @if(auth()->user()->hasRole('Enseignant') || auth()->user()->hasRole('Gestionnaire'))
     <div class="nav-label">Pédagogique</div>
     <a href="{{ route('notes.index') }}"
        class="nav-link {{ request()->routeIs('notes.index') ? 'active' : '' }}">
@@ -188,7 +188,7 @@
     <h6 class="mb-0 fw-bold">@yield('title', 'Tableau de bord')</h6>
     <div class="d-flex align-items-center gap-2">
         <span class="badge bg-warning text-dark">
-            {{ auth()->user()->role ?? 'gestionnaire' }}
+            {{ auth()->user()->getRoleNames()->first() ?? 'utilisateur' }}
         </span>
         <strong>{{ auth()->user()->name ?? '' }}</strong>
     </div>

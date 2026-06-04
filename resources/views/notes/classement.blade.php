@@ -35,13 +35,13 @@
 
     @if($eleves->isNotEmpty())
     <table class="table table-hover align-middle">
-        <thead class="table-dark">
+        <thead style="background-color: #1e293b;">
             <tr>
-                <th>Rang</th>
-                <th>Élève</th>
-                <th>Moyenne générale</th>
-                <th>Mention</th>
-                <th>Progression</th>
+                <th style="color: #f8fafc !important;">Rang</th>
+                <th style="color: #f8fafc !important;">Élève</th>
+                <th style="color: #f8fafc !important;">Moyenne générale</th>
+                <th style="color: #f8fafc !important;">Mention</th>
+                <th style="color: #f8fafc !important;">Progression</th>
             </tr>
         </thead>
         <tbody>
@@ -60,12 +60,12 @@
                     ($moy >= 14 ? 'success' :
                     ($moy >= 10 ? 'warning text-dark' : 'danger'));
             @endphp
-            <tr class="{{ $rang <= 3 ? 'table-warning' : '' }}">
+            <tr style="{{ $rang <= 3 ? 'background-color: #fef9c3;' : '' }}">
                 <td>
                     <span class="fs-5">{{ $medal }}</span>
                 </td>
                 <td>
-                    <strong>{{ $eleve->prenom }} {{ $eleve->nom }}</strong>
+                    <strong style="color: #1e293b;">{{ $eleve->prenom }} {{ $eleve->nom }}</strong>
                 </td>
                 <td>
                     <span class="fs-5 fw-bold {{ $moy ? ($moy >= 10 ? 'text-success' : 'text-danger') : '' }}">

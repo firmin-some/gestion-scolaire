@@ -79,6 +79,28 @@ class ParentController extends Controller
         return view('parent.notes', compact('eleve', 'matieres'));
     }
 
+    // Télécharger le bulletin PDF pour l'enfant
+    public function bulletinPdf(Request $request, Eleve $eleve)
+    {
+        if ($eleve->parent_id !== Auth::id()) {
+            abort(403, 'Accès non autorisé.');
+        }
+
+        $request->validate([
+            'trimestre' => 'required|in:T1,T2,T3',
+        ]);
+
+        $matieres  = ['Français','Mathématiques','Sciences','Histoire-Géo','Anglais','EPS'];
+        $trimestre = $request->input('trimestre');
+
+        $eleve->load(['classe', 'notes' => fn($q) => $q->where('trimestre', $trimestre)]);
+
+        $pdf = Pdf::loadView('pdf.parent-bulletin', compact('eleve', 'matieres', 'trimestre'))
+                  ->setPaper('a4', 'portrait');
+
+        return $pdf->download('bulletin-'.$eleve->prenom.'-'.$eleve->nom.'-'.$trimestre.'.pdf');
+    }
+
     // Voir les paiements d'un enfant
     public function paiements(Eleve $eleve)
     {

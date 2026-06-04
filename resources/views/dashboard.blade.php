@@ -13,7 +13,7 @@
         </div>
     </div>
 
-    @if(auth()->user()->hasRole('enseignant'))
+    @if(auth()->user()->hasRole('Enseignant'))
     <div class="col-md-4">
         <div class="card p-3">
             <div class="text-muted small">Enseignant</div>
@@ -27,7 +27,7 @@
     </div>
     @endif
 
-    @if(auth()->user()->hasRole('gestionnaire'))
+    @if(auth()->user()->hasRole('Gestionnaire'))
     <div class="col-md-3">
         <div class="card stat-card green p-3">
             <div class="text-muted small">Frais collectés</div>
@@ -63,10 +63,24 @@
             </div>
         </div>
     </div>
+    <div class="col-md-3">
+        <div class="card stat-card p-3">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="text-muted small">Enseignants</div>
+                    <div class="fs-2 fw-bold text-info">{{ $totalEnseignants ?? 0 }}</div>
+                    <div class="text-muted small">professeurs enregistrés</div>
+                </div>
+                <div>
+                    <a href="{{ route('enseignants.index') }}" class="btn btn-sm btn-outline-info">Voir</a>
+                </div>
+            </div>
+        </div>
+    </div>
     @endif
 </div>
 
-@if(auth()->user()->role === 'gestionnaire')
+@if(auth()->user()->hasRole('gestionnaire'))
 <div class="row g-3 mb-4">
     <div class="col-12">
         <div class="card p-3">
@@ -163,7 +177,7 @@
 </div>
 @endif
 
-@if(auth()->user()->role === 'gestionnaire')
+@if(auth()->user()->hasRole('gestionnaire'))
 <div class="row g-3 mt-4">
     <div class="col-12">
         <div class="card p-3">
@@ -190,6 +204,42 @@
                                 <td>{{ $parent->name }}</td>
                                 <td>{{ $parent->email }}</td>
                                 <td>{{ $parent->eleves_count }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mt-4">
+    <div class="col-12">
+        <div class="card p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="fw-bold mb-0"><i class="bi bi-person-badge-fill text-info"></i> Enseignants</h6>
+                <small class="text-muted">{{ $totalEnseignants ?? 0 }} enseignants</small>
+            </div>
+
+            @if(empty($enseignants) || $enseignants->isEmpty())
+                <div class="text-center text-muted py-4">Aucun enseignant enregistré.</div>
+            @else
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Email</th>
+                                <th>Spécialité</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($enseignants as $enseignant)
+                            <tr>
+                                <td>{{ $enseignant->prenom }} {{ $enseignant->nom }}</td>
+                                <td>{{ $enseignant->email }}</td>
+                                <td>{{ $enseignant->specialite_label }}</td>
                             </tr>
                             @endforeach
                         </tbody>

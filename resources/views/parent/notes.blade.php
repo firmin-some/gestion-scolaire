@@ -12,6 +12,14 @@
     </h5>
 </div>
 
+<div class="d-flex justify-content-end gap-2 mb-4">
+    @foreach(['T1'=>'1er Trimestre','T2'=>'2e Trimestre','T3'=>'3e Trimestre'] as $trim => $label)
+        <a href="{{ route('parent.bulletin.pdf', ['eleve' => $eleve, 'trimestre' => $trim]) }}" class="btn btn-outline-primary btn-sm">
+            <i class="bi bi-file-earmark-pdf"></i> {{ $label }}
+        </a>
+    @endforeach
+</div>
+
 @foreach(['T1'=>'1er Trimestre','T2'=>'2e Trimestre','T3'=>'3e Trimestre'] as $trim => $label)
 @php
     $notesTrim = $eleve->notes->where('trimestre', $trim);

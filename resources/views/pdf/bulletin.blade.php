@@ -41,19 +41,20 @@
         .badge-danger { background:#f8d7da; color:#721c24; }
 
         .footer { text-align:center; font-size:9px; color:#999; border-top:1px solid #eee; padding-top:8px; margin-top:10px; }
-        .rang-medal { font-size:14px; }
+        .rang-medal { font-size:13px; }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <h1>🏫 EcolePrime — Bulletin de Notes</h1>
-    <p>Système de Gestion Scolaire — Cycle Primaire — Année scolaire 2025–2026</p>
+    <h1>EcolePrime &mdash; Bulletin de Notes</h1>
+    <p>Système de Gestion Scolaire &mdash; Cycle Primaire &mdash; Année scolaire 2025&ndash;2026</p>
 </div>
 
 <div class="bulletin-title">
-    Bulletin {{ $trimestre == 'T1' ? '1er Trimestre' : ($trimestre == 'T2' ? '2e Trimestre' : '3e Trimestre') }}
-    — Classe : {{ $classe->nom }}
+    Bulletin
+    {{ $trimestre == 'T1' ? '1er Trimestre' : ($trimestre == 'T2' ? '2e Trimestre' : '3e Trimestre') }}
+    &mdash; Classe : {{ $classe->nom }}
 </div>
 
 <div class="classe-info">
@@ -69,7 +70,7 @@
             <th style="width:30px">Rang</th>
             <th class="text-left" style="width:120px">Élève</th>
             @foreach($matieres as $m)
-                <th style="width:60px">{{ substr($m,0,6) }}.</th>
+                <th style="width:60px">{{ substr($m, 0, 6) }}.</th>
             @endforeach
             <th style="width:50px">Moy.</th>
             <th style="width:70px">Mention</th>
@@ -83,17 +84,21 @@
                 $n = $eleve->notes->firstWhere('matiere', $m);
                 $notesList[$m] = $n ? (float)$n->note : null;
             }
-            $valides = array_filter($notesList, fn($v) => $v !== null);
-            $moy = count($valides) ? round(array_sum($valides)/count($valides), 2) : null;
-            $rang = $index + 1;
-            $medal = $rang==1 ? '🥇' : ($rang==2 ? '🥈' : ($rang==3 ? '🥉' : $rang));
+            $valides  = array_filter($notesList, fn($v) => $v !== null);
+            $moy      = count($valides) ? round(array_sum($valides) / count($valides), 2) : null;
+            $rang     = $index + 1;
+
+            // ✅ Emojis remplacés par texte pour éviter les problèmes d'encodage PDF
+            $medal = $rang == 1 ? '1er' : ($rang == 2 ? '2e' : ($rang == 3 ? '3e' : $rang));
+
             $mention = $moy === null ? '—' :
                 ($moy >= 16 ? 'Excellent' :
                 ($moy >= 14 ? 'Bien' :
                 ($moy >= 12 ? 'Assez bien' :
                 ($moy >= 10 ? 'Passable' : 'Insuffisant'))));
-            $moyClass = $moy === null ? '' :
-                ($moy >= 10 ? 'moy-bien' : 'moy-faible');
+
+            $moyClass = $moy === null ? '' : ($moy >= 10 ? 'moy-bien' : 'moy-faible');
+
             $badgeClass = $moy === null ? '' :
                 ($moy >= 14 ? 'badge-success' :
                 ($moy >= 10 ? 'badge-warning' : 'badge-danger'));
@@ -107,8 +112,10 @@
             <td class="{{ $moyClass }}">{{ $moy ?? '—' }}</td>
             <td>
                 @if($moy !== null)
-                <span class="badge {{ $badgeClass }}">{{ $mention }}</span>
-                @else — @endif
+                    <span class="badge {{ $badgeClass }}">{{ $mention }}</span>
+                @else
+                    —
+                @endif
             </td>
         </tr>
         @endforeach
@@ -116,7 +123,7 @@
 </table>
 
 <div class="footer">
-    Bulletin généré le {{ now()->format('d/m/Y à H:i') }} — EcolePrime © {{ date('Y') }}
+    Bulletin généré le {{ now()->format('d/m/Y à H:i') }} &mdash; EcolePrime &copy; {{ date('Y') }}
 </div>
 
 </body>

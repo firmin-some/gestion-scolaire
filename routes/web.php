@@ -25,7 +25,7 @@ Route::middleware(['auth'])->group(function () {
          ->name('dashboard');
 
     // Notes : accès lecture enseignant + gestionnaire
-    Route::middleware(['role:enseignant|gestionnaire'])->group(function () {
+    Route::middleware(['role:Enseignant|Gestionnaire'])->group(function () {
         Route::get('/notes', [NoteController::class, 'index'])->name('notes.index');
         Route::get('/notes/eleves', [NoteController::class, 'getEleves'])->name('notes.eleves');
         Route::get('/notes/moyennes', [NoteController::class, 'moyennes'])->name('notes.moyennes');
@@ -34,16 +34,17 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Notes : écriture enseignant uniquement
-    Route::middleware(['role:enseignant'])->group(function () {
+    Route::middleware(['role:Enseignant'])->group(function () {
         Route::post('/notes', [NoteController::class, 'store'])->name('notes.store');
     });
 
     // Parent + Enseignant : gestion de leurs enfants
-    Route::middleware(['role:parent|enseignant'])->prefix('parent')->name('parent.')->group(function () {
+    Route::middleware(['role:Parent|Enseignant'])->prefix('parent')->name('parent.')->group(function () {
         Route::get('/dashboard', [ParentController::class, 'dashboard'])->name('dashboard');
         Route::get('/inscrire', [ParentController::class, 'createEleve'])->name('inscrire');
         Route::post('/inscrire', [ParentController::class, 'storeEleve'])->name('inscrire.store');
         Route::get('/notes/{eleve}', [ParentController::class, 'notes'])->name('notes');
+        Route::get('/bulletin/{eleve}/pdf', [ParentController::class, 'bulletinPdf'])->name('bulletin.pdf');
         Route::get('/paiements/{eleve}', [ParentController::class, 'paiements'])->name('paiements');
         Route::get('/paiements/{eleve}/payer', [ParentController::class, 'formPaiement'])->name('paiements.form');
         Route::post('/paiements/{eleve}/payer', [ParentController::class, 'storePaiement'])->name('paiements.store');
@@ -51,13 +52,13 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Élèves : accès lecture gestionnaire + enseignant
-    Route::middleware(['role:enseignant|gestionnaire'])->group(function () {
+    Route::middleware(['role:Enseignant|Gestionnaire'])->group(function () {
         Route::get('/eleves', [EleveController::class, 'index'])->name('eleves.index');
         Route::get('/eleves/{eleve}', [EleveController::class, 'show'])->name('eleves.show');
     });
 
     // Gestionnaire : administration globale (sauf modification notes)
-    Route::middleware(['role:gestionnaire'])->group(function () {
+    Route::middleware(['role:Gestionnaire'])->group(function () {
         Route::resource('classes', ClasseController::class)->parameters(['classes' => 'classe']);
 
         Route::resource('eleves', EleveController::class)

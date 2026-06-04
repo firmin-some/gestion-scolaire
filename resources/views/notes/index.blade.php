@@ -39,7 +39,7 @@
         $trimestre = request('trimestre','T1');
     @endphp
 
-    @php $isGestionnaire = auth()->user()->hasRole('gestionnaire'); @endphp
+    @php $isGestionnaire = auth()->user()->hasRole('Gestionnaire'); @endphp
 
     @if($isGestionnaire)
         <div class="table-responsive">
