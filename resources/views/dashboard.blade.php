@@ -12,6 +12,21 @@
             <div class="text-muted small">{{ $totalClasses }} classes</div>
         </div>
     </div>
+
+    @if(auth()->user()->hasRole('enseignant'))
+    <div class="col-md-4">
+        <div class="card p-3">
+            <div class="text-muted small">Enseignant</div>
+            <h6 class="fw-bold mb-2">Accès rapide</h6>
+            <div class="d-grid gap-2">
+                <a href="{{ route('eleves.index') }}" class="btn btn-outline-primary btn-sm">Liste des élèves</a>
+                <a href="{{ route('notes.index') }}" class="btn btn-outline-success btn-sm">Notes / moyennes</a>
+                <a href="{{ route('parent.dashboard') }}" class="btn btn-outline-secondary btn-sm">Mes enfants / paiements</a>
+            </div>
+        </div>
+    </div>
+    @endif
+
     @if(auth()->user()->hasRole('gestionnaire'))
     <div class="col-md-3">
         <div class="card stat-card green p-3">

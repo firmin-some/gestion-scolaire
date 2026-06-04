@@ -140,6 +140,25 @@
     </a>
     @endif
 
+    {{-- Menu Enseignant --}}
+    @if(auth()->user()->role === 'enseignant')
+    <div class="nav-label">Enseignant</div>
+    <a href="{{ route('eleves.index') }}"
+       class="nav-link {{ request()->routeIs('eleves.index') ? 'active' : '' }}">
+        <i class="bi bi-people-fill"></i> Élèves inscrits
+    </a>
+    @endif
+
+    {{-- Menu Parent / Enseignant parent --}}
+    @if(auth()->user()->hasRole('parent') || auth()->user()->hasRole('enseignant'))
+    <div class="nav-label">Espace Parent</div>
+    <a href="{{ route('parent.dashboard') }}"
+       class="nav-link {{ request()->routeIs('parent.*') ? 'active' : '' }}">
+        <i class="bi bi-house-heart-fill"></i> Mes enfants
+    </a>
+    @endif
+
+    @if(auth()->user()->hasRole('enseignant') || auth()->user()->role === 'gestionnaire')
     <div class="nav-label">Pédagogique</div>
     <a href="{{ route('notes.index') }}"
        class="nav-link {{ request()->routeIs('notes.index') ? 'active' : '' }}">
@@ -153,6 +172,7 @@
        class="nav-link {{ request()->routeIs('notes.classement') ? 'active' : '' }}">
         <i class="bi bi-trophy-fill"></i> Classement
     </a>
+    @endif
 
     <div class="nav-label">Compte</div>
     <form method="POST" action="{{ route('logout') }}">

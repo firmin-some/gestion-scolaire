@@ -50,11 +50,19 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/paiements/{paiement}/recu', [ParentController::class, 'recuPdf'])->name('paiements.recu');
     });
 
+    // Élèves : accès lecture gestionnaire + enseignant
+    Route::middleware(['role:enseignant|gestionnaire'])->group(function () {
+        Route::get('/eleves', [EleveController::class, 'index'])->name('eleves.index');
+        Route::get('/eleves/{eleve}', [EleveController::class, 'show'])->name('eleves.show');
+    });
+
     // Gestionnaire : administration globale (sauf modification notes)
     Route::middleware(['role:gestionnaire'])->group(function () {
         Route::resource('classes', ClasseController::class)->parameters(['classes' => 'classe']);
 
-        Route::resource('eleves', EleveController::class);
+        Route::resource('eleves', EleveController::class)
+             ->only(['create', 'store', 'edit', 'update', 'destroy'])
+             ->parameters(['eleves' => 'eleve']);
 
         Route::resource('paiements', PaiementController::class);
         Route::get('/paiements/{paiement}/recu-pdf', [PaiementController::class, 'recuPdf'])

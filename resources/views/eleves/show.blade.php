@@ -27,9 +27,11 @@
                 <p><strong>Parent :</strong> {{ $eleve->nom_parent }}</p>
                 <p><strong>Tél :</strong> {{ $eleve->telephone_parent ?? '—' }}</p>
             </div>
+      @if(auth()->user()->role === 'gestionnaire')
       <a href="{{ route('eleves.edit', $eleve->id) }}" class="btn btn-outline-warning btn-sm mt-2">
                 <i class="bi bi-pencil"></i> Modifier
-            </a>
+      </a>
+      @endif
         </div>
     </div>
 

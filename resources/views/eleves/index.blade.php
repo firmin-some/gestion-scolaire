@@ -4,9 +4,11 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h5 class="fw-bold mb-0"><i class="bi bi-people-fill"></i> Liste des élèves</h5>
+    @if(auth()->user()->role === 'gestionnaire')
     <a href="{{ route('eleves.create') }}" class="btn btn-primary btn-sm">
         <i class="bi bi-plus-circle"></i> Inscrire un élève
     </a>
+    @endif
 </div>
 
 {{-- Filtres --}}
@@ -102,11 +104,11 @@
                         @endif
                     </td>
                     <td>
-                        {{-- ✅ CORRIGÉ : $eleve->id au lieu de $eleve --}}
                         <a href="{{ route('eleves.show', $eleve->id) }}"
                            class="btn btn-sm btn-outline-info" title="Voir">
                             <i class="bi bi-eye"></i>
                         </a>
+                        @if(auth()->user()->role === 'gestionnaire')
                         <a href="{{ route('eleves.edit', $eleve->id) }}"
                            class="btn btn-sm btn-outline-warning" title="Modifier">
                             <i class="bi bi-pencil"></i>
@@ -119,13 +121,16 @@
                                 <i class="bi bi-trash"></i>
                             </button>
                         </form>
+                        @endif
                     </td>
                 </tr>
                 @empty
                 <tr>
                     <td colspan="6" class="text-center text-muted py-4">
                         Aucun élève trouvé.
+                        @if(auth()->user()->role === 'gestionnaire')
                         <a href="{{ route('eleves.create') }}">Inscrire un élève</a>
+                        @endif
                     </td>
                 </tr>
                 @endforelse
