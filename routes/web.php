@@ -9,22 +9,17 @@ use App\Http\Controllers\NoteController;
 use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\ParentController;
 
-// Page d'accueil → redirige vers dashboard
 Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
-// Routes authentification / inscription
 require __DIR__.'/auth.php';
 
-// Routes protégées
 Route::middleware(['auth'])->group(function () {
 
-    // Dashboard général
-    Route::get('/dashboard', [DashboardController::class, 'index'])
-         ->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Notes : accès lecture Enseignant + Gestionnaire
+    // Notes
     Route::middleware(['role:Enseignant|Gestionnaire'])->group(function () {
         Route::get('/notes', [NoteController::class, 'index'])->name('notes.index');
         Route::get('/notes/eleves', [NoteController::class, 'getEleves'])->name('notes.eleves');
@@ -33,12 +28,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/notes/bulletin-pdf', [NoteController::class, 'bulletinPdf'])->name('notes.bulletin-pdf');
     });
 
-    // Notes : écriture Enseignant uniquement
     Route::middleware(['role:Enseignant'])->group(function () {
         Route::post('/notes', [NoteController::class, 'store'])->name('notes.store');
     });
 
-    // Parent + Enseignant : gestion de leurs enfants
+    // Parent + Enseignant
     Route::middleware(['role:Parent|Enseignant'])->prefix('parent')->name('parent.')->group(function () {
         Route::get('/dashboard', [ParentController::class, 'dashboard'])->name('dashboard');
         Route::get('/inscrire', [ParentController::class, 'createEleve'])->name('inscrire');
@@ -51,31 +45,33 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/paiements/{paiement}/recu', [ParentController::class, 'recuPdf'])->name('paiements.recu');
     });
 
-    // Élèves : accès lecture Gestionnaire + Enseignant
+    // Gestionnaire
+    Route::middleware(['role:Gestionnaire'])->group(function () {
+
+        Route::resource('classes', ClasseController::class)->parameters(['classes' => 'classe']);
+
+        // ✅ Routes statiques eleves EN PREMIER (avant {eleve})
+        Route::get('/eleves/create', [EleveController::class, 'create'])->name('eleves.create');
+        Route::post('/eleves', [EleveController::class, 'store'])->name('eleves.store');
+        Route::get('/eleves/{eleve}/edit', [EleveController::class, 'edit'])->name('eleves.edit');
+        Route::put('/eleves/{eleve}', [EleveController::class, 'update'])->name('eleves.update');
+        Route::patch('/eleves/{eleve}', [EleveController::class, 'update']);
+        Route::delete('/eleves/{eleve}', [EleveController::class, 'destroy'])->name('eleves.destroy');
+
+        Route::resource('paiements', PaiementController::class);
+        Route::get('/paiements/{paiement}/recu-pdf', [PaiementController::class, 'recuPdf'])->name('paiements.recu-pdf');
+        Route::patch('/paiements/{paiement}/valider', [PaiementController::class, 'valider'])->name('paiements.valider');
+        Route::patch('/paiements/{paiement}/rejeter', [PaiementController::class, 'rejeter'])->name('paiements.rejeter');
+
+        Route::resource('enseignants', EnseignantController::class);
+
+        Route::get('/gestionnaire/parents', [ParentController::class, 'index'])->name('gestionnaire.parents.index');
+    });
+
+    // ✅ Routes lecture eleves EN DERNIER (après les routes statiques)
     Route::middleware(['role:Enseignant|Gestionnaire'])->group(function () {
         Route::get('/eleves', [EleveController::class, 'index'])->name('eleves.index');
         Route::get('/eleves/{eleve}', [EleveController::class, 'show'])->name('eleves.show');
     });
 
-    // Gestionnaire : administration globale
-    Route::middleware(['role:Gestionnaire'])->group(function () {
-        Route::resource('classes', ClasseController::class)->parameters(['classes' => 'classe']);
-
-        Route::resource('eleves', EleveController::class)
-             ->only(['create', 'store', 'edit', 'update', 'destroy'])
-             ->parameters(['eleves' => 'eleve']);
-
-        Route::resource('paiements', PaiementController::class);
-        Route::get('/paiements/{paiement}/recu-pdf', [PaiementController::class, 'recuPdf'])
-             ->name('paiements.recu-pdf');
-        Route::patch('/paiements/{paiement}/valider', [PaiementController::class, 'valider'])
-             ->name('paiements.valider');
-        Route::patch('/paiements/{paiement}/rejeter', [PaiementController::class, 'rejeter'])
-             ->name('paiements.rejeter');
-
-        Route::resource('enseignants', EnseignantController::class);
-
-        Route::get('/gestionnaire/parents', [ParentController::class, 'index'])
-             ->name('gestionnaire.parents.index');
-    });
 });
